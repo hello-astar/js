@@ -2,7 +2,7 @@
  * @Description: 封装cookie
  * @Author: astar
  * @Date: 2021-07-01 13:53:07
- * @LastEditTime: 2021-07-01 14:37:18
+ * @LastEditTime: 2021-07-01 14:46:13
  * @LastEditors: astar
  */
 /**
@@ -29,7 +29,7 @@ function getCookies () {
 */
 function getCookie (name) {
   let cookies = getCookies()
-  return cookies.find(item => item.name === name) || null
+  return (cookies.find(item => item.name === name) || {}).value
 }
 /**
 * 设置cookie， day <=0 删除cookie
@@ -37,7 +37,21 @@ function getCookie (name) {
 * @date 2021-07-01 14:22
 */
 function setCookie (name, value, day) {
-  let expireDate = new Date()
-  expireDate.setDate(expireDate.getDate() + day)
-  document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expireDate.toGMTString()}`
+  if (day !== 0) {
+    let expireDate = new Date()
+    expireDate.setDate(expireDate.getDate() + day)
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expireDate.toGMTString()}`
+  } else {
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`
+  }
+}
+
+/**
+* 删除cookie
+* @author astar
+* @date 2021-07-01 14:41
+*/
+function removeCookie (name) {
+  let value = getCookie(name)
+  setCookie(name, value, -1)
 }
