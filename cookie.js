@@ -2,7 +2,7 @@
  * @Description: 封装cookie
  * @Author: astar
  * @Date: 2021-07-01 13:53:07
- * @LastEditTime: 2021-07-01 14:46:13
+ * @LastEditTime: 2021-07-01 15:04:06
  * @LastEditors: astar
  */
 /**
@@ -36,13 +36,24 @@ function getCookie (name) {
 * @author astar
 * @date 2021-07-01 14:22
 */
-function setCookie (name, value, day) {
+function setCookie (name, value, day, opts) {
+  let paramsStr = ''
+  if (opts) {
+    ['path', 'domain', 'sameSite'].forEach(element => {
+      if (opts[element]) {
+        paramsStr += `; ${element}=${encodeURIComponent(opts[element])}`
+      }
+    })
+    if (opts.secure) {
+      paramsStr += '; secure'
+    }
+  }
   if (day !== 0) {
     let expireDate = new Date()
     expireDate.setDate(expireDate.getDate() + day)
-    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expireDate.toGMTString()}`
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expireDate.toGMTString()}${paramsStr}`
   } else {
-    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}${paramsStr}`
   }
 }
 
