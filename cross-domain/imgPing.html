@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cross-domain demo</title>
+</head>
+<body>
+  nick在线
+</body>
+<script>
+  let img = new Image();
+  img.onload = img.onerror = function () {
+    console.log('已通知服务端nick浏览了此页面')
+  }
+  img.src = `http://localhost:3000/tool/test?name=nick`
+</script>
+</html>
