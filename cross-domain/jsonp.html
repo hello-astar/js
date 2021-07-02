@@ -1,0 +1,115 @@
+<!--
+ * @Description: jsonp实践
+ * @Author: astar
+ * @Date: 2021-07-02 17:14:07
+ * @LastEditTime: 2021-07-02 18:50:53
+ * @LastEditors: astar
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cross-domain demo</title>
+</head>
+
+<body>
+  <div>测试jsonp</div>
+</body>
+<script>
+  const getEncodeParams = (data = {}) => {
+    let res = []
+    for (let key in data) {
+      res.push(`${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`);
+    }
+    return res.join('&');
+  }
+  /**
+  * 版本1，同一时刻只能发送一个请求
+  * @author astar
+  * @date 2021-07-02 18:10
+  */
+  function jsonp_v1(url, data, callbackFunc) {
+    let elem = document.createElement('script');
+    elem.type = 'text/javascript';
+    elem.src = `${url}?${getEncodeParams(data)}&callback=callbackFunc`;
+    document.body.appendChild(elem);
+    window.callbackFunc = callbackFunc;
+  }
+
+  /**
+  * 版本2，增加唯一callbackName，可定义不同回调函数
+  * @author astar
+  * @date 2021-07-02 18:25
+  */
+  function jsonp_v2 (url, data, callbackFunc) {
+    let elem = document.createElement('script');
+    let callbackName = `jsonp_${new Date().getTime()}`;
+    elem.type = 'text/javascript';
+    elem.src = `${url}?${getEncodeParams(data)}&callback=${callbackName}`;
+    document.body.appendChild(elem);
+    window[callbackName] = callbackFunc;
+  }
+
+  /**
+  * 版本3，promise封装
+  * @author astar
+  * @date 2021-07-02 18:25
+  */
+  function jsonp_v3 (url, data) {
+    return new Promise((resolve, reject) => {
+      let elem = document.createElement('script');
+      let callbackName = `jsonp_${new Date().getTime()}`;
+      elem.type = 'text/javascript';
+      elem.src = `${url}?${getEncodeParams(data)}&callback=${callbackName}`;
+      document.body.appendChild(elem);
+      window[callbackName] = resolve;
+      elem.onerror = function () { reject('调用接口失败') };
+    });
+  }
+  /**
+  * 版本4，请求结束后删除全局变量和script标签
+  * @author astar
+  * @date 2021-07-02 18:40
+  */
+  function jsonp_v4 (url, data) {
+    return new Promise((resolve, reject) => {
+      let elem = document.createElement('script');
+      let callbackName = `jsonp_${new Date().getTime()}`;
+      elem.type = 'text/javascript';
+      elem.src = `${url}?${getEncodeParams(data)}&callback=${callbackName}`;
+      document.body.appendChild(elem);
+      window[callbackName] = function (res) { // 服务器处理请求后会返回"调用这个函数的脚本"
+        resolve(res);
+        delete window[callbackName];
+        document.body.removeChild(elem);
+      }
+      elem.onerror = function() {
+        reject('调用接口失败');
+        delete window[callbackName];
+        document.body.removeChild(elem);
+      };
+    });
+  }
+  // 版本1
+  jsonp_v1('http://localhost:3000/tool/test', { keyword: 'hello-world' }, function (res) {
+    console.log(res, 'v1')
+  })
+  // 版本2
+  jsonp_v2('http://localhost:3000/tool/test', { keyword: 'hello-world' }, function (res) {
+    console.log(res, 'v2')
+  })
+  // 版本3
+  jsonp_v3('http://localhost:3000/tool/test', { keyword: 'hello' }).then(res => {
+    console.log(res, 'v3')
+  });
+  // 版本4
+  jsonp_v4('http://localhost:3000/tool/test', { keyword: 'hello-world' }).then(res => {
+    console.log(res, 'v4')
+  });
+
+</script>
+
+</html>
