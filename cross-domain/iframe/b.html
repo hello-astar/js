@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cross-domain demo</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /**
+  * 解析url,获取接口url,请求方式和参数
+  * @author astar
+  * @date 2021-07-03 17:37
+  */
+  function parseSearch() {
+    let search = location.search.slice(1);
+    let keyValuePairArr = search.split('&');
+    let obj = {};
+
+    keyValuePairArr.forEach(pair => {
+      let [key, value] = pair.split('=');
+      obj[decodeURIComponent(key)] = decodeURIComponent(value);
+    });
+    return obj;
+  }
+  /**
+  * 获取接口参数
+  * @author astar
+  * @date 2021-07-03 17:38
+  */
+  function getParams(obj) {
+    delete obj.type;
+    delete obj.queryUrl;
+    return obj;
+  }
+  let obj = parseSearch();
+  // 简单使用xhr发送请求
+  let xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4) {
+      console.log(xhr.status, xhr.responseText)
+      if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
+        window.parent.postMessage({ data: xhr.responseText, key: obj.key }, '*');
+      } else {
+        console.log("Request was unsuccessful:" + xhr.status);
+      }
+    }
+  };
+  xhr.open(obj.type, obj.queryUrl);
+  xhr.send(JSON.stringify(getParams(obj)));
+</script>
+</html>

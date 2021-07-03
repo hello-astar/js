@@ -1,0 +1,52 @@
+<!--
+ * @Description: iframe + postMessage解决跨域
+ * @Author: astar
+ * @Date: 2021-07-02 19:34:24
+ * @LastEditTime: 2021-07-03 17:52:44
+ * @LastEditors: astar
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cross-domain demo</title>
+</head>
+<body>
+</body>
+<script>
+  /**
+  * 通过iframe通信
+  * @author astar
+  * @date 2021-07-03 12:47
+  */
+  function iframeCommunicate(url, cb) {
+    let iframe = document.createElement('iframe');
+    let key = `callbackName_${new Date().getTime()}`;
+    iframe.style.display = 'none';
+    iframe.name = key;
+    iframe.src = url + `&key=${key}`; // 增加请求唯一标识
+    document.body.appendChild(iframe);
+    window[key] = cb;
+  }
+  function handleIframe (e) {
+    let { data, key } = e.data;
+    if (window[key]) {
+      window[key](e.data);
+      let iframes = document.getElementsByName(key);
+      document.body.removeChild(iframes[0]);
+      delete window[key];
+    }
+  }
+  // 所有接口返回都会调用handleIframe,需要指定唯一的标识(key),辨别返回的信息是哪一次调用iframeCommunicate
+  window.addEventListener('message', handleIframe);
+
+  iframeCommunicate(`http://localhost:3000?type=GET&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test?keyword=888&callback=test')}`, function(params) {
+    console.log('接口返回', params)
+  });
+  iframeCommunicate(`http://localhost:3000?type=POST&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test')}&keyword=999&callback=test`, function(params) {
+    console.log('接口返回', params)
+  });
+</script>
+</html>
