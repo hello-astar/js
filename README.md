@@ -1,1 +1,1 @@
-# Javascript Demo For Blogs
+# Javascript Demo For My Blogs

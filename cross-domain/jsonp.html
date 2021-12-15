@@ -2,7 +2,7 @@
  * @Description: jsonp实践
  * @Author: astar
  * @Date: 2021-07-02 17:14:07
- * @LastEditTime: 2021-07-02 18:50:53
+ * @LastEditTime: 2021-12-15 22:45:29
  * @LastEditors: astar
 -->
 <!DOCTYPE html>
@@ -35,8 +35,8 @@
     let elem = document.createElement('script');
     elem.type = 'text/javascript';
     elem.src = `${url}?${getEncodeParams(data)}&callback=callbackFunc`;
-    document.body.appendChild(elem);
     window.callbackFunc = callbackFunc;
+    document.body.appendChild(elem);
   }
 
   /**
@@ -49,8 +49,8 @@
     let callbackName = `jsonp_${new Date().getTime()}`;
     elem.type = 'text/javascript';
     elem.src = `${url}?${getEncodeParams(data)}&callback=${callbackName}`;
-    document.body.appendChild(elem);
     window[callbackName] = callbackFunc;
+    document.body.appendChild(elem);
   }
 
   /**
@@ -64,9 +64,9 @@
       let callbackName = `jsonp_${new Date().getTime()}`;
       elem.type = 'text/javascript';
       elem.src = `${url}?${getEncodeParams(data)}&callback=${callbackName}`;
-      document.body.appendChild(elem);
       window[callbackName] = resolve;
       elem.onerror = function () { reject('调用接口失败') };
+      document.body.appendChild(elem);
     });
   }
   /**
@@ -80,7 +80,6 @@
       let callbackName = `jsonp_${new Date().getTime()}`;
       elem.type = 'text/javascript';
       elem.src = `${url}?${getEncodeParams(data)}&callback=${callbackName}`;
-      document.body.appendChild(elem);
       window[callbackName] = function (res) { // 服务器处理请求后会返回"调用这个函数的脚本"
         resolve(res);
         delete window[callbackName];
@@ -91,6 +90,7 @@
         delete window[callbackName];
         document.body.removeChild(elem);
       };
+      document.body.appendChild(elem);
     });
   }
   // 版本1
