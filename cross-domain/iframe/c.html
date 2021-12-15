@@ -2,7 +2,7 @@
  * @Description: iframe + postMessage解决跨域
  * @Author: astar
  * @Date: 2021-07-02 19:34:24
- * @LastEditTime: 2021-07-03 18:47:44
+ * @LastEditTime: 2021-12-16 01:39:57
  * @LastEditors: astar
 -->
 <!DOCTYPE html>
@@ -34,10 +34,10 @@
       document.body.removeChild(iframe);
     };
   }
-  iframeCommunicate(`http://localhost:3000?type=GET&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test?keyword=888&callback=test')}`, function (params) {
+  iframeCommunicate(`http://localhost:3000/d.html?type=GET&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test?keyword=888&callback=test')}`, function (params) {
     console.log('接口1返回', params)
   });
-  iframeCommunicate(`http://localhost:3000?type=POST&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test')}&keyword=999&callback=test`, function(params) {
+  iframeCommunicate(`http://localhost:3000/d.html?type=POST&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test')}&keyword=999&callback=test`, function(params) {
     console.log('接口2返回', params)
   });
 </script>
