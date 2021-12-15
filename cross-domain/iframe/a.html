@@ -2,7 +2,7 @@
  * @Description: iframe + postMessage解决跨域
  * @Author: astar
  * @Date: 2021-07-02 19:34:24
- * @LastEditTime: 2021-07-03 17:52:44
+ * @LastEditTime: 2021-12-16 01:25:53
  * @LastEditors: astar
 -->
 <!DOCTYPE html>
@@ -42,10 +42,10 @@
   // 所有接口返回都会调用handleIframe,需要指定唯一的标识(key),辨别返回的信息是哪一次调用iframeCommunicate
   window.addEventListener('message', handleIframe);
 
-  iframeCommunicate(`http://localhost:3000?type=GET&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test?keyword=888&callback=test')}`, function(params) {
+  iframeCommunicate(`http://localhost:3000/b.html?type=GET&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test?keyword=888&callback=test')}`, function(params) {
     console.log('接口返回', params)
   });
-  iframeCommunicate(`http://localhost:3000?type=POST&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test')}&keyword=999&callback=test`, function(params) {
+  iframeCommunicate(`http://localhost:3000/b.html?type=POST&queryUrl=${encodeURIComponent('http://localhost:3000/tool/test')}&keyword=999&callback=test`, function(params) {
     console.log('接口返回', params)
   });
 </script>
