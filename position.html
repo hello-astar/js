@@ -1,0 +1,114 @@
+<!--
+ * @Description: 两栏/三栏自适应问题
+ * @Author: astar
+ * @Date: 2021-12-17 17:56:30
+ * @LastEditTime: 2021-12-17 22:34:03
+ * @LastEditors: astar
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>两栏/三栏自适应问题</title>
+</head>
+<body>
+  <h3>两栏自适应</h3>
+  <h4>1. 左侧浮动，右侧margin-left</h4>
+  <div class="content">
+    <div class="left" style="float: left;">left</div>
+    <div class="right" style="margin-left: 200px;">right</div>
+  </div>
+
+  <h4>2. 左侧浮动，右侧BFC</h4>
+  <div class="content">
+    <div class="left" style="float: left;">left</div>
+    <div class="right" style="overflow: hidden;">right</div>
+  </div>
+
+  <h4>3. 左侧position: absolute, 右侧margin-left</h4>
+  <div class="content" style="position: relative;">
+    <div class="left" style="position: absolute; left: 0; top: 0;">left</div>
+    <div class="right" style="margin-left: 200px;">right</div>
+  </div>
+
+  <h4>4. 右侧position: absolute, left: 200px, top: 0, right: 0, bottom: 0, width: auto</h4>
+  <div class="content" style="position: relative;">
+    <div class="left">left</div>
+    <div class="right" style="position: absolute; left: 200px; top: 0; right: 0; bottom: 0; width: auto;">right</div>
+  </div>
+
+  <h4>5. flex: 1</h4>
+  <div class="content" style="display: flex;">
+    <div class="left">left</div>
+    <div class="right" style="flex: 1;">right</div>
+  </div>
+
+  <h3>三栏自适应</h3>
+  <h4>1. 利用绝对定位absolute</h4>
+  <div class="content content-three clear" style="position: relative;">
+    <div class="middle" style="margin: 0 200px">main</div>
+    <div class="left" style="position: absolute; left: 0; top: 0">left</div>
+    <div class="right" style="position: absolute; right: 0; top: 0">right</div>
+  </div>
+  <h4>2. 利用浮动</h4>
+  <div class="content content-three clear">
+    <div class="left" style="float: left;">left</div>
+    <div class="right" style="float: right;">right</div>
+    <div class="middle" style="margin: 0 200px">main</div>
+  </div>
+  <h4>3. 利用flex</h4>
+  <div class="content content-three" style="display: flex;">
+    <div class="left">left</div>
+    <div class="middle" style="flex: 1;">main</div>
+    <div class="right">right</div>
+  </div>
+  <h4>4. 圣杯布局：利用浮动 + 负margin实现 + position: relative</h4>
+  <div class="content content-three clear" style="padding: 0 200px;">
+    <div class="middle" style="float: left; width: 100%;">main</div>
+    <div class="left" style="float: left; margin-left: -100%; position: relative; left: -200px;">left</div>
+    <div class="right" style="float: left; margin-right: -200px;">right</div>
+  </div>
+  <h4>5. 双飞翼布局：利用浮动 + 负margin实现</h4>
+  <div class="content content-three clear">
+    <div class="middle" style="width: 100%; float: left;">
+      <div class="main_n" style="margin: 0 200px;">main</div>
+    </div>
+    <div class="left" style="float: left; margin-left: -100%;">left</div>
+    <div class="right" style="float: left; margin-left: -200px;">right</div>
+  </div>
+  <h4>6. calc</h4>
+  <div class="content content-three clear">
+    <div class="left" style="float: left;">left</div>
+    <div class="middle" style="width: calc(100% - 400px); float: left;">main</div>
+    <div class="right" style="float: left;">right</div>
+  </div>
+</body>
+<style>
+  .content div {
+    height: 500px;
+  }
+  .left {
+    width: 200px;
+    background-color: red;
+  }
+  .middle {
+    background-color: green;
+  }
+  .right {
+    background-color: yellow;
+  }
+  .content-three .right {
+    width: 200px;
+  }
+  .clear {
+    zoom: 1;
+  }
+  .clear:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+</style>
+</html>
