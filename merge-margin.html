@@ -1,0 +1,63 @@
+<!--
+ * @Description: 外边距合并问题
+ * @Author: astar
+ * @Date: 2021-12-17 16:58:33
+ * @LastEditTime: 2021-12-17 17:52:13
+ * @LastEditors: astar
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>外边距合并问题</title>
+</head>
+<body>
+  <h3>外边距合并</h3>
+  <div class="content">
+    <span>BFC区域内，两个小方块出现外边距合并</span>
+    <div class="box"></div>
+    <div class="box"></div>
+  </div>
+
+  <h3>毗邻元素中间有border（border: 1px solid green），外边距不合并</h3>
+  <div class="content">
+    <span>BFC区域内，两个小方块外边距没有合并</span>
+    <div class="box"></div>
+    <div style="border: 1px solid green"></div>
+    <div class="box"></div>
+  </div>
+
+  <h3>在两个小方块外包裹BFC块，形成两个BFC区域</h3>
+  <div class="content">
+    <span>小方块分别处于两个独立BFC中，外边距不会合并</span>
+    <div class="bfc">
+      <div class="box"></div>
+    </div>
+    <div class="bfc">
+      <div class="box"></div>
+    </div>
+  </div>
+</body>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .content {
+    width: 500px;
+    background-color: gray;
+    border: 1px solid yellow;
+  }
+  .content .box {
+    height: 100px;
+    width: 100px;
+    background-color: red;
+    margin: 20px;
+  }
+  .bfc {
+    overflow: auto;
+  }
+</style>
+</html>
