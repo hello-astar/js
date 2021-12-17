@@ -1,0 +1,94 @@
+<!--
+ * @Description: 清除浮动示例
+ * @Author: astar
+ * @Date: 2021-12-17 16:00:34
+ * @LastEditTime: 2021-12-17 16:37:33
+ * @LastEditors: astar
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>清除浮动</title>
+</head>
+<body>
+  <h3>正常没有浮动</h3>
+  <div class="content">
+    <div>没有</div>
+    <div>浮动</div>
+  </div>
+  <div class="after">after</div>
+
+  <h3>子元素浮动，父元素没有设置高度</h3>
+  <div class="content">
+    <div class="float-left">hello</div>
+    <div class="float-right">world</div>
+  </div>
+  <div class="after">after</div>
+
+  <h3>解决方案1: 设置父元素高度</h3>
+  <div class="content content-1">
+    <div class="float-left">hello</div>
+    <div class="float-right">world</div>
+  </div>
+  <div class="after">after</div>
+
+  <h3>解决方案2：增加空子元素清除浮动</h3>
+  <div class="content content-2">
+    <div class="float-left">hello</div>
+    <div class="float-right">world</div>
+    <div class="clear"></div>
+  </div>
+  <div class="after">after</div>
+
+  <h3>解决方案3：增加:after伪元素</h3>
+  <div class="content content-3">
+    <div class="float-left">hello</div>
+    <div class="float-right">world</div>
+  </div>
+  <div class="after">after</div>
+
+  <h3>解决方案4：父元素overflow: auto</h3>
+  <div class="content content-4">
+    <div class="float-left">hello</div>
+    <div class="float-right">world</div>
+  </div>
+  <div class="after">after</div>
+</body>
+<style>
+  .content {
+    background-color: red;
+  }
+  .content > div {
+    width: 20%;
+    background-color: yellow;
+  }
+  .float-left {
+    float: left;
+  }
+  .float-right {
+    float: right;
+  }
+  .content-1 {
+    height: 200px;
+  }
+  .content-2 .clear {
+    clear: both;
+  }
+  .content-3 {
+    zoom: 1;
+  }
+  .content-3:after {
+    content: '\20';
+    display: block;
+    height: 0;
+    clear: both;
+  }
+  .content-4 {
+    overflow: auto;
+    zoom: 1;
+  }
+</style>
+</html>
