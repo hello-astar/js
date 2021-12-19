@@ -2,7 +2,7 @@ let win = window;
 let doc = document;
 
 const getDpr = function () {
-  return window.devicePixelRatio;
+  return parseInt(window.devicePixelRatio);
 }
 
 const getSize = function (win, doc) {
