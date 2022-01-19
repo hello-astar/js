@@ -2,7 +2,7 @@
  * @Description: 清除浮动示例
  * @Author: astar
  * @Date: 2021-12-17 16:00:34
- * @LastEditTime: 2021-12-17 16:37:33
+ * @LastEditTime: 2022-01-09 20:01:31
  * @LastEditors: astar
 -->
 <!DOCTYPE html>
@@ -78,7 +78,7 @@
     clear: both;
   }
   .content-3 {
-    zoom: 1;
+    *zoom: 1;
   }
   .content-3:after {
     content: '\20';
@@ -88,7 +88,7 @@
   }
   .content-4 {
     overflow: auto;
-    zoom: 1;
+    *zoom: 1;
   }
 </style>
 </html>
