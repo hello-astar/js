@@ -1,0 +1,53 @@
+<!--
+ * @Description: 
+ * @Author: astar
+ * @Date: 2022-01-19 14:25:18
+ * @LastEditTime: 2022-01-19 15:49:51
+ * @LastEditors: astar
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片懒加载-scroll</title>
+  <style>
+    img {
+      display: block;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div style="height: 2000px;">
+    <img style="min-height: 200px;" src="" data-src="https://img2.baidu.com/it/u=4164941104,2312687806&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=2468128380,1891608897&fm=26&fmt=auto" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=3688400740,2343300667&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=313" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=3121521822,3907398461&fm=253&fmt=auto&app=120&f=JPEG?w=1422&h=800" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img0.baidu.com/it/u=2912602589,4272179276&fm=253&fmt=auto&app=120&f=JPEG?w=889&h=500" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=2409696601,3682572892&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img2.baidu.com/it/u=828360808,3415485822&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img0.baidu.com/it/u=768412126,815291831&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=313" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=2409696601,3682572892&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500" alt="">
+  </div>
+  <script>
+    const viewHeight = window.innerHeight || document.documentElement.clientHeight
+    const imgs = document.querySelectorAll('img')
+    let threshold = 100
+    window.onload = lazyLoad
+    document.addEventListener('scroll', function (e) {
+      lazyLoad()
+    })
+    function lazyLoad () {
+      imgs.forEach(img => {
+        let { top } = img.getBoundingClientRect()
+        if (img.dataset.src && top - viewHeight < threshold) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src')
+        }
+      })
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片懒加载-交叉观察者</title>
+  <style>
+    img {
+      display: block;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <img style="min-height: 200px;" src="" data-src="https://img2.baidu.com/it/u=4164941104,2312687806&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=2468128380,1891608897&fm=26&fmt=auto" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=3688400740,2343300667&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=313" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=3121521822,3907398461&fm=253&fmt=auto&app=120&f=JPEG?w=1422&h=800" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img0.baidu.com/it/u=2912602589,4272179276&fm=253&fmt=auto&app=120&f=JPEG?w=889&h=500" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=2409696601,3682572892&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img2.baidu.com/it/u=828360808,3415485822&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img0.baidu.com/it/u=768412126,815291831&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=313" alt="">
+    <img width="100%" style="min-height: 200px;" src="" data-src="https://img1.baidu.com/it/u=2409696601,3682572892&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500" alt="">
+  </div>
+  <script>
+    let imgs = document.querySelectorAll('img')
+    let imgsLen = imgs.length
+    let count = 0
+    let eachRetryTimes = 3 // 每张图片可以重试三次
+    function addOneSuccess (observer, target) {
+      target.removeAttribute('data-src')
+      target.removeAttribute('data-retry')
+      observer.unobserve(target)
+      if (count === imgsLen) { // 全都加载完毕，可以关闭观察器
+        observer.disconnect()
+      }
+    }
+    // 目标元素的可见性变化时，就会调用观察器的回调函数callback。
+    // callback一般会触发两次。一次是目标元素刚刚进入视口（开始可见），另一次是完全离开视口（开始不可见）。
+    let observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {// 如果同时有两个被观察的对象的可见性发生变化，entries数组就会有两个成员。
+        if (e.intersectionRatio > 0 && e.target.dataset.src) { // 可见
+          e.target.src = e.target.dataset.src
+          let retry = Number(e.target.dataset.retry || 0)
+          e.target.setAttribute('data-retry', ++retry)
+          e.target.onload = function () {
+            addOneSuccess(observer, this)
+          }
+          e.target.onerror = function () {
+            let retry = this.dataset.retry // 重试次数
+            if (Number(retry) === eachRetryTimes) {
+              addOneSuccess(observer, this)
+            }
+          }
+        }
+      })
+    })
+    imgs.forEach(img => {
+      observer.observe(img)
+    })
+    imgs = null
+  </script>
+</body>
+</html>
